@@ -12,19 +12,18 @@
     <button v-for='(option, idx) in questionOptions' v-bind:class="{ current: currentChoice === idx }"  @click='selectOption(idx)'> {{option}}    </button>
 
     <div v-if='timeLeft > 0'>
-      {{currentChoice === -1 ? `Warning! Choose in ${timeLeft } seconds!` : `${timeLeft} seconds left`}}
+      {{auto ? `Warning, random option chosen! Choose for yourself in ${timeLeft} second${timeLeft > 1 ? 's': ''}!` : `${timeLeft} second${timeLeft > 1 ? 's': ''} left!`}}
     </div>
   </div>
 </template>
 
 <script>
-// import { ACTION_APP_INCREMENT, ACTION_APP_DECREMENT} from './../store/app.store'
-
 export default {
   name: 'Quizer',
   data: function() {
     return {
       currentChoice: -1,
+      auto: false,
     }
   },
   props: [
@@ -47,9 +46,21 @@ export default {
       return this.$store.getters.getTimeLeft;
     }
   },
+  watch: {
+    timeLeft: function(newVal, oldVal) {
+      if (newVal === 5 && this.currentChoice == -1) {
+        this.selectOption(Math.floor(Math.random() * 4));
+        this.auto = true;
+      }
+    },
+    questionNo: function(newVal, oldVal) {
+      this.currentChoice = -1;
+    }
+  },
   methods: {
     selectOption: function(idx) {
       if (this.active && idx !== this.currentChoice) {
+        this.auto = false;
         if (this.currentChoice !== -1) {
           this.$socket.client.emit('change_vote', { team: this.team, choice: idx, prev: this.currentChoice } );
         } else {
