@@ -1,17 +1,23 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
+    <!-- <p>
+    <router-link to="/quizer">Go to Quizer</router-link>
+      <router-link to="/controller">Go to Controller</router-link>
+    </p> -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Quizer from './components/Quizer.vue'
+import Controller from './components/Controller.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    Quizer,
+    Controller
   }
 }
 </script>

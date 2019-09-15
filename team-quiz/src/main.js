@@ -1,11 +1,28 @@
-import Vue from 'vue'
-import App from './App.vue'
-import store from './store'
+import Vue from 'vue';
+import VueRouter from 'vue-router'
+import VueSocketIOExt from 'vue-socket.io-extended';
+import socketio from 'socket.io-client';
+import App from './App.vue';
+import store from './store';
+import Controller from './components/Controller.vue'
+import Quizer from './components/Quizer.vue'
 
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+
+export const socket = socketio('http://localhost:3000');
+Vue.use(VueSocketIOExt, socket, { store });
+Vue.use(VueRouter)
+
+const router = new VueRouter({
+  routes: [
+    { path: '/', component: Quizer },
+    { path: '/controller', component: Controller }
+  ]
+})
 
 new Vue({
   render: h => h(App),
-  store
-}).$mount('#app')
+  store,
+  router,
+}).$mount('#app');
