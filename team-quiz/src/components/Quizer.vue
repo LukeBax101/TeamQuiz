@@ -14,10 +14,11 @@
         </div>
       </div>
       <div v-else>
+        <Score> </Score>
         You're on team: {{ team }}
-        <Question v-if='inQuestion' v-bind:team='team'>
+        <Question v-if='questionStage === 0' v-bind:team='team' v-bind:active='true'>
         </Question>
-        <Results v-if='!inQuestion'>
+        <Results v-bind:team='team' v-if='questionNo !== 0'>
         </Results>
       </div>
     </div>
@@ -29,6 +30,7 @@
 // import { ACTION_APP_INCREMENT, ACTION_APP_DECREMENT} from './../store/app.store'
 import Question from './Question.vue'
 import Results from './Results.vue'
+import Score from './Score.vue'
 
 
 export default {
@@ -36,7 +38,6 @@ export default {
   data: function() {
     return {
       team: '',
-      password: '',
     }
   },
   computed: {
@@ -46,14 +47,18 @@ export default {
     open: function() {
       return this.$store.getters.getOpen;
     },
-    inQuestion: function() {
-      return this.$store.getters.getInQuestion;
-    }
+    questionStage: function() {
+      return this.$store.getters.getQuestionStage;
+    },
+    questionNo: function() {
+      return this.$store.getters.getQuestionNo;
+    },
 
   },
   components: {
     Question,
-    Results
+    Results,
+    Score
   },
   methods: {
     chooseTeamSamuel: function() {

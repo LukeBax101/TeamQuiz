@@ -8,26 +8,32 @@ const state = {
     {
       question: 'is this a question?',
       options: ['A','B','C','D'],
+      correct: 0,
     },
     {
       question: 'is this me?',
       options: ['E','F','G','H'],
+      correct: 1,
     },{
       question: 'is this you?',
       options: ['I','J','K','L'],
+      correct: 2,
     }
   ],
   samQuestions: [
     {
       question: 'is this a sam question?',
       options: ['M','N','O','P'],
+      correct: 3,
     },
     {
       question: 'is this sam?',
       options: ['Q','R','S','T'],
+      correct: 1,
     },{
       question: 'is this?',
       options: ['U','V','W','X'],
+      correct: 2,
     }
   ]
 };
@@ -38,6 +44,12 @@ const getters = {
   },
   getCurrentSamQuestion (state) {
     return state.samQuestions[state.questionNo-1];
+  },
+  getCurrentAmyAnswer (state) {
+    return state.amyQuestions[state.questionNo-1].correct;
+  },
+  getCurrentSamAnswer (state) {
+    return state.samQuestions[state.questionNo-1].correct;
   },
   getQuestionNo (state) {
     return state.questionNo;
