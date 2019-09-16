@@ -5,7 +5,7 @@
     </div>
     <div v-else>
       <div v-if='teamSelected'>
-        Choose the person you are closet to:
+        Choose the person who's team you'd like to be on:
         <button type='button' @click='chooseTeamSamuel()'> Team Samuel</button>
         <button type='button' @click='chooseTeamAmy()'> Team Amy</button>
         <div>
@@ -27,7 +27,6 @@
 </template>
 
 <script>
-// import { ACTION_APP_INCREMENT, ACTION_APP_DECREMENT} from './../store/app.store'
 import Question from './Question.vue'
 import Results from './Results.vue'
 import Score from './Score.vue'
@@ -63,7 +62,6 @@ export default {
   methods: {
     chooseTeamSamuel: function() {
       this.team = 'samuel';
-      // this.$socket.client.emit('vote', this.appCounter + 1);
     },
     chooseTeamAmy: function() {
       this.team = 'amy';
@@ -77,5 +75,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 </style>

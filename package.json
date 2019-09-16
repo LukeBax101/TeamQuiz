@@ -1,0 +1,15 @@
+{
+    "name": "TeamQuiz",
+    "description": "Basic team quiz functionality",
+    "version": "0.0.1",
+    "private": true,
+    "license": "MIT",
+    "author": "Luke Baxter",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "express": "^4.17.1",
+        "socket.io": "^2.2.0"
+    }
+}

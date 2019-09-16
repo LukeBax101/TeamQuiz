@@ -1,4 +1,4 @@
-# team-quiz
+# TeamQuiz
 
 ## Project setup
 ```

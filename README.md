@@ -1,1 +1,1 @@
-# TeamQuiz
+npm run start
