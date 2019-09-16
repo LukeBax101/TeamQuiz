@@ -6,7 +6,7 @@ const port = process.env.PORT || 1337;
 
 var server = express();
 server.use('/', express.static(__dirname + '/dist'));
-server.listen(port);
+var app = server.listen(port);
 
 let open = false;
 let timeLeft = -1;
@@ -17,13 +17,10 @@ let samVotes = [0,0,0,0];
 let amyScore = 0;
 let samScore = 0;
 
-var httpServer = http.createServer(server);
 
-let io = socketIO(httpServer, {
+let io = socketIO.listen(app, {
   transports: ['websocket']
 });
-
-httpServer.listen(31875, "127.0.0.1");
 
 io.on("connection", client => {
   client.on("open_update", function(data) {
