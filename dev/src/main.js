@@ -10,7 +10,7 @@ import Quizer from './components/Quizer.vue'
 
 Vue.config.productionTip = false;
 
-export const socket = socketio('http://localhost:3000', {
+export const socket = socketio('http://localhost:31875', {
   transports: ['websocket'],
 });
 Vue.use(VueSocketIOExt, socket, { store });

@@ -23,7 +23,7 @@ let io = socketIO(httpServer, {
   transports: ['websocket']
 });
 
-httpServer.listen(3000, "127.0.0.1");
+httpServer.listen(31875, "127.0.0.1");
 
 io.on("connection", client => {
   client.on("open_update", function(data) {
