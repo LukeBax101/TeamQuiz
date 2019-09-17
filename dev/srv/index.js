@@ -1,7 +1,8 @@
-import express from 'express';
-import socketIO from "socket.io";
+const express = require('express');
+const socketIO = require('socket.io');;
 
-export default (app, http) => {
+module.exports = (app, http) =>  {
+  
   let open = false;
   let timeLeft = -1;
   let questionStage = 0;
@@ -11,7 +12,9 @@ export default (app, http) => {
   let amyScore = 0;
   let samScore = 0;
 
-  let io = socketIO(http);
+  let io = socketIO.listen(http, {
+    transports: ['websocket']
+  });
   io.on("connection", client => {
     client.on("open_update", function(data) {
       open = data;
