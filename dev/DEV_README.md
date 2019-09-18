@@ -25,5 +25,11 @@ npm run test
 npm run lint
 ```
 
+### Run Express server for socket.io
+```
+npm run express
+```
+
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
