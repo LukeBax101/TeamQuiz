@@ -9,8 +9,9 @@
     <div>
        {{ questionText }}
     </div>
-    <button v-for='(option, idx) in questionOptions' v-bind:class="{ current: currentChoice === idx }"  @click='selectOption(idx)'> {{option}}    </button>
-
+    <div class='optionContainer'>
+      <button class='option' v-for='(option, idx) in questionOptions' v-bind:class="{ current: currentChoice === idx }"  @click='selectOption(idx)'> {{option}}    </button>
+    </div>
     <div v-if='timeLeft > 0'>
       {{auto ? `Warning, random option chosen! Choose for yourself in ${timeLeft} second${timeLeft > 1 ? 's': ''}!` : `${timeLeft} second${timeLeft > 1 ? 's': ''} left!`}}
     </div>
@@ -19,7 +20,7 @@
 
 <script>
 export default {
-  name: 'Quizer',
+  name: 'Question',
   data: function() {
     return {
       currentChoice: -1,
@@ -77,5 +78,15 @@ export default {
 <style scoped>
 .current {
   background: green;
+}
+
+.option {
+  height: 70px;
+}
+
+.optionContainer {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
 }
 </style>

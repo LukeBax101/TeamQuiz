@@ -1,4 +1,4 @@
-## Initial Setup: ##
+## Initial Setup ##
 
 1. Install nodejs
 2. Install npm
@@ -10,7 +10,7 @@
 8. Run ` npm install ` again
 
 
-## How to run/deploy: ##
+## How to run/deploy ##
 
   Three ways to run/build/test/deploy changes: _(ordered from easiest to see changes/least similar to the cloud -> hardest to see changes/ most similar to the cloud)_
 
