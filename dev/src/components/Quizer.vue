@@ -16,7 +16,7 @@
       <div v-else>
         <Score> </Score>
         You're on team: {{ team }}
-        <Question v-if='questionStage === 0' v-bind:team='team' v-bind:active='true'>
+        <Question v-bind:team='team' v-bind:active='true'>
         </Question>
         <Results v-bind:team='team' v-if='questionNo !== 0'>
         </Results>

@@ -1,8 +1,18 @@
 const express = require('express');
-const socketIO = require('socket.io');;
+const socketIO = require('socket.io');
+
+
 
 module.exports = (app, http) =>  {
-  
+  function shuffleTieBreak() {
+    let array = [0,1,2,3];
+    for (let i = 3 - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
   let open = false;
   let timeLeft = -1;
   let questionStage = 0;
@@ -11,6 +21,7 @@ module.exports = (app, http) =>  {
   let samVotes = [0,0,0,0];
   let amyScore = 0;
   let samScore = 0;
+  let tieBreak = [0,1,2,3];
 
   let io = socketIO.listen(http, {
     transports: ['websocket']
@@ -22,6 +33,10 @@ module.exports = (app, http) =>  {
     });
     client.on("question_stage_update", function(data) {
       questionStage = data;
+      if (data === 0) {
+        tieBreak = shuffleTieBreak();
+        io.emit("tie_break_update", tieBreak);
+      }
       io.emit("question_stage_update", data);
     });
     client.on("question_no_update", function(data) {
@@ -63,6 +78,6 @@ module.exports = (app, http) =>  {
     client.emit("vote_update", {amyVotes, samVotes});
     client.emit("question_end_warning", timeLeft);
     client.emit("score_update", {amyScore, samScore});
-
+    client.emit("tie_break_update", tieBreak);
   });
 }

@@ -157,11 +157,11 @@ export default {
       }, 1000);
     },
     calculateScores: function() {
-      const amyPoint = this.amyVotes.filter((val, idx) => idx !== this.amyAnswer).some((val, idx) => val >= this.amyVotes[this.amyAnswer]);
-      const amy = amyPoint ? this.amyScore: this.amyScore + 1;
+      const noAmyPoint = this.amyVotes[this.amyAnswer] === 0 || this.amyVotes.filter((val, idx) => idx !== this.amyAnswer).some((val, idx) => val > this.amyVotes[this.amyAnswer]);
+      const amy = noAmyPoint ? this.amyScore : this.amyScore + 1;
 
-      const samPoint = this.samVotes.filter((val, idx) => idx !== this.samAnswer).some((val, idx) => val >= this.samVotes[this.samAnswer]);
-      const sam = samPoint ? this.samScore: this.samScore + 1;
+      const noSamPoint = this.samVotes[this.samAnswer] === 0 || this.samVotes.filter((val, idx) => idx !== this.samAnswer).some((val, idx) => val > this.samVotes[this.samAnswer]);
+      const sam = noSamPoint ? this.samScore : this.samScore + 1;
       this.$socket.client.emit('score_update', {amy, sam});
     }
   }
