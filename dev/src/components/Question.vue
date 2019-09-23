@@ -4,11 +4,11 @@
   </div>
   <div v-else>
     <div v-if='timeLeft > 0'>
-      <b-alert show dismissible> {{auto ? `Warning, random option chosen! Choose for yourself in ${timeLeft}second${timeLeft > 1 ? 's': ''}!` : `${timeLeft}second${timeLeft > 1 ? 's': ''}left!`}}
+      <b-alert show dismissible> {{auto ? `Warning, random option chosen! Choose for yourself in ${timeLeft} second${timeLeft > 1 ? 's': ''}!` : `${timeLeft} second${timeLeft > 1 ? 's': ''} left!`}}
       </b-alert>
     </div>
     <div>
-      Question {{ questionNo }}
+      <strong> Question {{ questionNo }} </strong>
     </div>
     <div>
        {{ questionText }}
@@ -23,20 +23,22 @@
         v-bind:question='option'
         class = 'option'
         @click='selectOption(idx)'
-        v-bind:class='{
-          team: currentTeamChoice === idx,
-          player: currentChoice === idx,
-          answer: (questionStage === 2 && answer === idx)
-        }'
+        v-bind:class="{
+          'player-choice': currentChoice === idx,
+          'answer-correct': (questionStage === 2 && answer === idx),
+          'answer-incorrect': (questionStage === 2 && (currentTeamChoice === idx || currentTeamChoice === -1) && currentTeamChoice !== answer)
+        }"
         :key='idx'>
        <span class='progress' v-bind:style="{width: widths[idx]+'%'}">
        </span>
+       <span v-if='currentTeamChoice === idx' class='team-choice'></span>
      </b-button>
     </div>
   </div>
 </template>
-
+<!-- team: currentTeamChoice === idx, -->
 <script>
+import Team from '../teamType.js';
 export default {
   name: 'Question',
   data: function() {
@@ -55,68 +57,44 @@ export default {
       return this.$store.getters.getQuestionNo;
     },
     questionText: function() {
-      return this.team === 'amy' ? this.$store.getters.getCurrentAmyQuestion.question :
-      this.$store.getters.getCurrentSamQuestion.question;
+      return this.team === Team.AMY ? this.$store.getters.getCurrentAmyQuestion.question :
+                                      this.$store.getters.getCurrentSamQuestion.question;
     },
     questionStage: function() {
       return this.$store.getters.getQuestionStage;
     },
     questionOptions: function() {
-      return this.team === 'amy' ? this.$store.getters.getCurrentAmyQuestion.options :
-      this.$store.getters.getCurrentSamQuestion.options;
+      return this.team === Team.AMY ? this.$store.getters.getCurrentAmyQuestion.options :
+                                      this.$store.getters.getCurrentSamQuestion.options;
     },
     timeLeft: function() {
       return this.$store.getters.getTimeLeft;
     },
     answer: function() {
-      return this.team === 'amy' ? this.$store.getters.getCurrentAmyAnswer:
-                                  this.$store.getters.getCurrentSamAnswer;
+      return this.team === Team.AMY ? this.$store.getters.getCurrentAmyAnswer:
+                                      this.$store.getters.getCurrentSamAnswer;
     },
-    samVotes: function() {
-      return this.$store.getters.getCurrentSamResults;
-    },
-    amyVotes: function() {
-      return this.$store.getters.getCurrentAmyResults;
+    votes: function() {
+      return this.team === Team.AMY ? this.$store.getters.getCurrentAmyResults:
+                                      this.$store.getters.getCurrentSamResults;
     },
     tieBreak: function() {
       return this.$store.getters.getTieBreak;
     },
-    currentTeamAmyChoice: function() {
-      let i = Math.max(...this.amyVotes);
-      if (i === 0) return -1;
-      for (let j = 0; j < 3; j++ ) {
-        if (this.amyVotes[this.tieBreak[j]] === i) {
-          return this.tieBreak[j];
-        }
-      }
-      return -1;
-    },
-    currentTeamSamChoice: function() {
-      let i = Math.max(...this.samVotes);
-      if (i === 0)  return -1;
-      for (let j = 0; j < 3; j++ ) {
-        if (this.samVotes[this.tieBreak[j]] === i) {
-          return this.tieBreak[j];
-        }
-      }
-      return -1;
-    },
     currentTeamChoice: function() {
-      return this.team === 'amy' ? this.currentTeamAmyChoice:
-                                   this.currentTeamSamChoice;
+      let i = Math.max(...this.votes);
+      if (i === 0)  return -1;
+      for (let j = 0; j < 4; j++ ) {
+        if (this.votes[this.tieBreak[j]] === i) {
+          return this.tieBreak[j];
+        }
+      }
+      return -1;
     },
     widths: function() {
-      return this.team === 'amy' ? this.amyWidths:
-                                  this.samWidths;
+      const sum = this.votes.reduce((val, acc) => {return val + acc;}, 0);
+      return this.votes.map((val) => val === 0 ? 0: ((val/sum) * 100));
     },
-    amyWidths: function() {
-      const sum = this.amyVotes.reduce((val, acc) => {return val + acc;}, 0);
-      return this.amyVotes.map((val) => ((val/sum) * 100));
-    },
-    samWidths: function() {
-      const sum = this.samVotes.reduce((val, acc) => {val + acc}, 0);
-      return this.samVotes.map((val) => ((val/sum) * 100));
-    }
   },
   watch: {
     timeLeft: function(newVal) {
@@ -128,6 +106,9 @@ export default {
     },
     questionNo: function() {
       this.currentChoice = -1;
+    },
+    questionStage: function(newVal) {
+      if (newVal == 2) this.currentChoice = -1;
     }
   },
   methods: {
@@ -149,7 +130,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-.player {
+.player-choice {
   color: #fff !important;
   background-color: #17a2b8;
   border-color: #17a2b8;
@@ -158,26 +139,45 @@ export default {
   outline: 0;
 }
 
-.team {
-  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.5) !important;
-}
-
-.answer {
+.answer-incorrect {
   color: #fff;
-  background-color: #dc3545;
-  border-color: #dc3545;
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
   text-decoration: none;
-  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5) !important;
   outline: 0;
 }
 
-.team.answer {
-  color: #fff;
-  background-color: #28a745;
-  border-color: #28a745;
+.answer-correct {
+  color: #000 !important;
+  background-color: #28a745 !important;
+  border-color: #28a745 !important;
   text-decoration: none;
-  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5) !important;
   outline: 0;
+}
+
+.team-choice {
+  background-color: gold;
+  position: absolute;
+    right: 10%;
+    width: 24px;
+    height: 24px;
+    mask-image: url("../../public/icons-crown.png");
+    -webkit-mask-image: url("../../public/icons-crown.png");
+    animation: rock 0.75s ease-in-out infinite;
+    -webkit-animation: rock 0.75s ease-in-out infinite;
+}
+
+@keyframes rock {
+  0% { transform: rotate(15deg); }
+  50% { transform: rotate(-15deg); }
+  100% { transform: rotate(15deg); }
+}
+@webkit-keyframes rock {
+  0% { webkit-transform: rotate(15deg); }
+  50% { -webkit-transform: rotate(-15deg); }
+  100% { -webkit-transform: rotate(15deg); }
 }
 
 .optionContainer {
@@ -188,6 +188,8 @@ export default {
 
 .option{
     height: 50px;
+    width: 95%;
+    left: 2.5%;
     overflow: hidden;
     position:relative;
 }

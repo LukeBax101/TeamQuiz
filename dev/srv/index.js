@@ -1,6 +1,6 @@
 const express = require('express');
 const socketIO = require('socket.io');
-
+const Team = require('../src/teamType.js')
 
 
 module.exports = (app, http) =>  {
@@ -59,7 +59,7 @@ module.exports = (app, http) =>  {
       io.emit("score_update", {amyScore, samScore});
     });
     client.on("change_vote", function({team, choice, prev}) {
-      if (team === 'amy') {
+      if (team === Team.AMY) {
         amyVotes[choice]++;
         if (prev >= 0) amyVotes[prev]--;
       } else {

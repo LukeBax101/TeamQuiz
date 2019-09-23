@@ -3,6 +3,9 @@
     <div class='amy-score'>
     Amy: {{ amyScore }}
   </div>
+  <div class='team-name'>
+    Team {{team}}
+  </div>
   <div class='sam-score'>
     Sam: {{ samScore }}
   </div>
@@ -25,7 +28,7 @@ export default {
     },
     samScore: function() {
       return this.$store.getters.getSamScore;
-    }
+    },
   },
   methods: {
 
@@ -46,6 +49,10 @@ export default {
 }
 
 .sam-score {
+  margin-left: auto;
+}
+
+.team-name {
   margin-left: auto;
 }
 </style>

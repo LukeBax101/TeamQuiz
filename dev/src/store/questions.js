@@ -46,9 +46,11 @@ const getters = {
     return state.samQuestions[state.questionNo-1];
   },
   getCurrentAmyAnswer (state) {
+    if (state.questionNo < 1) return -1;
     return state.amyQuestions[state.questionNo-1].correct;
   },
   getCurrentSamAnswer (state) {
+    if (state.questionNo < 1) return -1;
     return state.samQuestions[state.questionNo-1].correct;
   },
   getQuestionNo (state) {

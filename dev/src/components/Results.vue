@@ -1,6 +1,6 @@
 <template>
   <div>
-    Results are in for question {{ questionNo }}
+    Results for question {{ questionNo }}
     {{ results }}
     <div v-if='questionStage === 2'>
       The correct answer is: {{ answer }}
@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import Team from '../teamType.js';
 
 export default {
   name: 'Results',
@@ -23,14 +24,14 @@ export default {
       return this.$store.getters.getQuestionNo;
     },
     results: function() {
-      return this.team === 'amy' ? this.$store.getters.getCurrentAmyResults:
+      return this.team === Team.AMY ? this.$store.getters.getCurrentAmyResults:
                                   this.$store.getters.getCurrentSamResults;
     },
     questionStage: function() {
       return this.$store.getters.getQuestionStage;
     },
     answer: function() {
-      return this.team === 'amy' ? this.$store.getters.getCurrentAmyAnswer:
+      return this.team === Team.AMY ? this.$store.getters.getCurrentAmyAnswer:
                                   this.$store.getters.getCurrentSamAnswer;
     }
 

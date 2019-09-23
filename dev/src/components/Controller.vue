@@ -2,8 +2,7 @@
   <div>
     <div v-if='!verified'>
       Enter password:
-      <input type='password' v-model='password'>
-      </input>
+      <input type='password' v-model='password'/>
     </div>
     <div v-else>
       <div>
@@ -27,15 +26,15 @@
       <div v-if='questionNo !== 0'>
         <Score></Score>
         <div>
-          Current Amy Question:
+          Current {{amy}} Question:
           <Question v-bind:team='amy' v-bind:active='false'></Question>
-          Current Sam Question:
+          Current {{sam}} Question:
           <Question v-bind:team='sam' v-bind:active='false'></Question>
         </div>
         <div>
-          Current Amy Results:
+          Current {{amy}} Results:
           <Results v-bind:team='amy'></Results>
-          Current Sam Results:
+          Current {{sam}} Results:
           <Results v-bind:team='sam'></Results>
         </div>
       </div>
@@ -48,6 +47,8 @@
 import Results from './Results.vue'
 import Question from './Question.vue'
 import Score from './Score.vue'
+// eslint-disable-next-line
+import Team from '../teamType.js'
 
 export default {
   name: 'Controller',
@@ -104,8 +105,8 @@ export default {
     return {
       verfied: false,
       password: '',
-      amy: 'amy',
-      sam: 'samuel',
+      amy: Team.AMY,
+      sam: Team.SAM,
     }
   },
   components: {
@@ -157,10 +158,10 @@ export default {
       }, 1000);
     },
     calculateScores: function() {
-      const noAmyPoint = this.amyVotes[this.amyAnswer] === 0 || this.amyVotes.filter((val, idx) => idx !== this.amyAnswer).some((val, idx) => val > this.amyVotes[this.amyAnswer]);
+      const noAmyPoint = this.amyVotes[this.amyAnswer] === 0 || this.amyVotes.filter((val, idx) => idx !== this.amyAnswer).some((val) => val > this.amyVotes[this.amyAnswer]);
       const amy = noAmyPoint ? this.amyScore : this.amyScore + 1;
 
-      const noSamPoint = this.samVotes[this.samAnswer] === 0 || this.samVotes.filter((val, idx) => idx !== this.samAnswer).some((val, idx) => val > this.samVotes[this.samAnswer]);
+      const noSamPoint = this.samVotes[this.samAnswer] === 0 || this.samVotes.filter((val, idx) => idx !== this.samAnswer).some((val) => val > this.samVotes[this.samAnswer]);
       const sam = noSamPoint ? this.samScore : this.samScore + 1;
       this.$socket.client.emit('score_update', {amy, sam});
     }

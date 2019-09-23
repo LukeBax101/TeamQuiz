@@ -33,3 +33,11 @@ npm run express
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+Todo/Bugs:
+  -   Pretty score bar at top - point addition animation when correct
+  -   Better positioning of questions on page
+  -   Image round
+  -   Colour scheme pulled out as environment variables
+  -   Final scores on the doors
+  -   Tidy up controller login 
