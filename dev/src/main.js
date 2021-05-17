@@ -12,9 +12,12 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 
 Vue.config.productionTip = false;
-const host = process.env.NODE_ENV === 'production' ? window.location.origin : 'localhost:3000';
 
-export const socket = socketio(host, {
+const SOCKET_URL = process.env.NODE_ENV === 'production' ? `${window.location.origin}` : 'http://localhost:3000';
+const SOCKET_PATH = process.env.NODE_ENV === 'production' ? '/team-quiz/socket.io' : '/socket.io';
+
+export const socket = socketio(SOCKET_URL, {
+  path: SOCKET_PATH,
   transports: ['websocket'],
 });
 Vue.use(VueSocketIOExt, socket, { store });
